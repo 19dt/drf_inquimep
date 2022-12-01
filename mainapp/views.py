@@ -6,13 +6,17 @@ from rest_framework import permissions
 from .models import Client, Entry
 from analysis.models import Analysis, Silver, Gold
 from .serializers import ClientSerializer, EntrySerializer, AnalysisSerializer, AnalysisGoldSerializer, AnalysisSilverSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 
 
-# Create your views here.
+# Métodos APIVIEW.
+
 class ClientListAPIView(ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+    permission_classes = [IsAuthenticated]
     
 class ClientCreateAPIView(CreateAPIView):
     serializer_class = ClientSerializer
@@ -91,6 +95,14 @@ class AnalysisSilverDestroyAPIView(DestroyAPIView):
         return Response({'msg': f"Se ha eliminado correctamente el analisis plata {self.kwargs['pk']}"})
     
 
-    
-    
+# Modificando APIView
 
+class ClientAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        print(self.request.query_params)
+        return Response({'resp': True})
+    
+    def post(self, request, *args, **kwargs):
+        queryset = Client.objects.all()
+        serializer = ClientSerializer(queryset, many = True)
+        return Response(serializer.data)

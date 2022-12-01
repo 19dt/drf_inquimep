@@ -1,12 +1,10 @@
 from django.urls import path, include
 
-from .views import (
-    ClientListAPIView, EntryListAPIView, EntryCreateAPIView, ClientCreateAPIView,
-    ClientUpdateAPIView, ClientDestroyAPIView, EntryUpdateAPIView, EntryDestroyAPIView
-)
+from .views import *
 
 urlpatterns = [
     path('client/list/', ClientListAPIView.as_view(), name='client_list'),
+    path('client/', ClientAPIView.as_view(), name='client'),
     path('client/create/',ClientCreateAPIView.as_view(), name='client_create'),
     path('client/update/<int:pk>',ClientUpdateAPIView.as_view(), name='client_update'),
     path('client/delete/<int:pk>',ClientDestroyAPIView.as_view(), name='client_delete'),

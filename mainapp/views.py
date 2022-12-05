@@ -3,13 +3,38 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework import status
 from rest_framework import permissions
-from .models import Client, Entry
+from .models import Client, Entry, User
 from analysis.models import Analysis, Silver, Gold
 from .serializers import ClientSerializer, EntrySerializer, AnalysisSerializer, AnalysisGoldSerializer, AnalysisSilverSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.contrib.auth import login, logout
+from django.views.decorators.csrf import csrf_protect
+from django.views.generic.edit import FormView
+from django.http import HttpResponseRedirect
+from django.contrib.auth.forms import AuthenticationForm
 
+# Login / Logout
 
+class Login(FormView):
+    template_name: "login.html"
+    form_class: AuthenticationForm
+    success_url: reverse_lazy('user:user_list')
+    
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return super(Login,self).dispatch(self,*args,**kwargs)
+    
+    def form_valid(self, form):
+        user = authenticate()
+    
 
 # Métodos APIVIEW.
 

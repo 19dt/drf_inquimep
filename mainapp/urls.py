@@ -12,5 +12,4 @@ urlpatterns = [
     path('entry/create/', EntryCreateAPIView.as_view(), name='entry_create'),
     path('entry/update/<int:pk>',EntryUpdateAPIView.as_view(), name='entry_update'),
     path('entry/delete/<int:pk>',EntryDestroyAPIView.as_view(), name='entry_delete'),
-    
 ]

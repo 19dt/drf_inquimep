@@ -48,6 +48,15 @@ class Logout(APIView):
 
 # Métodos APIVIEW.
 
+class UserAPI(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data= request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -170,3 +179,6 @@ class ClientAPIView(APIView):
 class ClientViewSet(ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+    
+    def list(self, request, *args, **kwargs):
+        return Response({'id': 1})
